@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "fideloper/proxy": "~3.3",
-        "gameye/gameye-sdk-php": "^1.0",
+        "gameye/gameye-sdk-php": "2.*",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0"
     },
@@ -17,6 +17,12 @@
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~6.0"
     },
+    "repositories": [
+    {
+        "type": "path",
+        "url": "./gameye-php-sdk"
+    }
+    ],
     "autoload": {
         "classmap": [
             "database/seeds",
