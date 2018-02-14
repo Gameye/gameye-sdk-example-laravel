@@ -18,7 +18,6 @@
   <thead>
       <tr>
         <th>Game ID</th>
-        <th>Name</th>
       </tr>
   </thead>
   <tbody>
@@ -26,8 +25,7 @@
 
     @foreach($games as $game)
       <tr>
-        <td><a href="/games/{{ $game->gameId }}">{{ $game->gameId }}</a></td>
-        <td>{{ $game->name }}</td>
+        <td><a href="/games/{{ $game->gameKey }}">{{ $game->gameKey }}</a></td>
       </tr>
     @endforeach
     </tbody>

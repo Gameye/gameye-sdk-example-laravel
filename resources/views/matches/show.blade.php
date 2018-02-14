@@ -13,43 +13,43 @@
     Match Information
   </div>
   <div class="panel-body">
-    Match information obtained from $match and $result.
+   General match information
   </div>
   <table class="table">
     <tr>
       <td><strong>Match ID</strong></td>
-      <td>{{ $match->matchId }}</td>
+      <td>{{ $match->matchKey }}</td>
       <td><strong>Server address</strong></td>
-      <td>{{ $match->host }}</td>  
+      <td><a href="steam://connect/{{ $match->host}}:{{ $match->port->game }}">{{ $match->host}}:{{ $match->port->game }}</a></td>  
     </tr>
     <tr>
       <td><strong>Game port</strong></td>
-      <td>{{ $match->portMapping->udp->{27015} }}</td> 
+      <td>{{ $match->port->game }}</td> 
       <td><strong>GOTV port</strong></td>
-      <td>{{ $match->portMapping->udp->{27015} }}</td> 
+      <td>{{ $match->port->gotv }}</td> 
     </tr>
     <tr>
-      <td><strong>Map</strong></td>
-      <td>{{ $result->map }}</td>
+      <td><strong>Created at</strong></td>
+      <td>{{ \Carbon\Carbon::createFromTimestamp(($match->created / 1000))->toDateTimeString() }}</td>
       <td><strong>State</strong></td>
       <td>
-      @if ($result->isFinished===true)
+      @if (isset($result->stop))
       Match ended
       @else 
       Match running
       @endif
       </td>
     </tr>
-    <tr>
+    <tr> {{-- 
       <td><strong>Join link game</strong></td>
       <td><a href="steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27015} }}">steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27015} }}</a></td>
       <td><strong>Join link GOTV</strong></td>
-      <td><a href="steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27020} }}">steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27020} }}</a></td>
+      <td><a href="steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27020} }}">steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27020} }}</a></td> --}}
     </tr>
   </table>
   </div>
 
-  <div class="panel panel-default">
+  {{-- <div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading">
       Round information
@@ -87,7 +87,7 @@
     @endforeach
     </tbody>
   </table>
-  </div>
+  </div> --}}
 
   <div class="panel panel-default">
     <!-- Default panel contents -->
@@ -96,26 +96,22 @@
     </div>
     <div class="panel-body">
         <tr>
-          Player information sample.
+          Player information.
         </tr>
     </div>
 
     <table class="table">
       <thead>
         <tr>
-          <th>Player</th>
-          <th>Name</th>
           <th>UID</th>
           <th>State</th>
         </tr>
       </thead>
       <tbody>
-        @foreach($result->player as $player)
+        @foreach($result->player as $uid => $player)
           <tr>
-            <td>{{ $player->key }}</td>
-            <td>{{ $player->name }}</td>
             <td>{{ $player->uid }}</td>
-            @if ($player->isConnected == 1)
+            @if ($player->connected)
             <td>Connected</td>
             @else
             <td>Disconnected</td>

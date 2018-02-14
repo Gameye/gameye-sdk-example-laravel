@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \Gameye\SDK\GameyeClient;
+use \Gameye\SDK\GameyeHelper;
 
 class MatchesController extends Controller
 {
@@ -18,8 +19,11 @@ class MatchesController extends Controller
             "AccessToken" => session('gameyeApiKey'),
             "ApiEndpoint" => session('gameyeApiEndpoint'),
         ]);
-        $gameId = 1; // gameId 1: csgo
-        $matches = $client->GetActiveMatches($gameId);
+
+        $matchList = $client->queryMatch();
+        $matches = $matchList->match;
+
+        //dd($matches);
 
         return view('matches.index')->with('matches', $matches);
     }
@@ -35,13 +39,16 @@ class MatchesController extends Controller
             "AccessToken" => session('gameyeApiKey'),
             "ApiEndpoint" => session('gameyeApiEndpoint'),
         ]);
-        $gameId = 1; // 1: CSGO
-        $locations = $client->GetLocations($gameId);
-        $templates = $client->GetTemplates($gameId);
+
+        $locationList = $client->queryGame();
+        $locations = $locationList->location;
+
+        $templateList = $client->queryTemplate('csgo');
+        $templates = $templateList->template;
 
         return view('matches.create')
-            -> with ('locations',$locations)
-            -> with ('templates', $templates);
+            ->with('locations', $locations)
+            ->with('templates', $templates);
     }
 
     /**
@@ -58,22 +65,28 @@ class MatchesController extends Controller
         ]);
         
         // The matchId must be unique. Please generate your own unique ID.
-        $matchId = time();
-        $locationIds = $request->input('locationId');
-        $gameId = 1; // 1: CSGO
-        $templateId = $request->input('templateId'); 
+        $matchKey = time();
+        $locationKeys = [$request->input('locationId')];
+        $gameKey = "csgo";
+        $templateKey = $request->input('templateId'); 
         
-        // More Configuration to launch the match with
+        // More configuration to launch the match with
         $config = [
-            'maxplayers' => 1,
-            'sv_setsteamaccount' => $request->input('sv_setsteamaccount'),
-            'tickrate' => 128,
-            'mapgroup' => $request->input('mapgroup'),
-            'map' => $request->input('map'),
+            'maxplayers' => $request->input('maxplayers'),
+            'steamToken' => $request->input('steamToken'),
+            'tickrate'   => 128,
+            'mapgroup'   => $request->input('mapgroup'),
+            'map'        => $request->input('map'),
         ];
 
         // Do the actual call with the GameyeClient.
-        $client -> StartMatch($matchId, $locationIds, $gameId, $templateId, $config);
+        $client->commandStartMatch([
+            'matchKey'     => $matchKey,
+            'locationKeys' => $locationKeys,
+            'gameKey'      => $gameKey,
+            'templateKey'  => $templateKey,
+            'config'       => $config
+        ]);
 
         return redirect('matches');
     }
@@ -84,19 +97,21 @@ class MatchesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($key)
     {   
         $client = new \Gameye\SDK\GameyeClient([
             "AccessToken" => session('gameyeApiKey'),
             "ApiEndpoint" => session('gameyeApiEndpoint'),
         ]);
 
-        $matchResult = $client->GetMatchResult($id);      
-        $match = $client->GetMatch($id);
+        $matchState = $client->queryMatch();
+        $match = GameyeHelper::selectMatchItem($matchState, $key);
+
+        $matchResult = $client->queryStatistic($key, 'global-match');
 
         return view('matches.show')
-            -> with('match', $match)
-            -> with('result', $matchResult);
+            ->with('match', $match)
+            ->with('result', $matchResult);
     }
 
     /**
@@ -105,14 +120,14 @@ class MatchesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($key)
     {
         $client = new \Gameye\SDK\GameyeClient([
             "AccessToken" => session('gameyeApiKey'),
             "ApiEndpoint" => session('gameyeApiEndpoint'),
         ]);
 
-        $client->StopMatch($id); 
+        $client->commandStopMatch(['matchKey' => $key]); 
 
         return redirect('matches');
     }

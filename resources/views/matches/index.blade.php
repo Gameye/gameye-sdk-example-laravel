@@ -18,30 +18,25 @@
   <thead>
       <tr>
         <th>Match ID</th>
+        <th>Game</th>
         <th>Actions</th>
       </tr>
   </thead>
   <tbody>
-
-
     @foreach($matches as $match)
       <tr>
-        <td><a href="/matches/{{ $match->matchId }}">{{ $match->matchId }}</a></td>
+        <td><a href="/matches/{{ $match->matchKey }}">{{ $match->matchKey }}</a></td>
+        <td>{{ $match->gameKey }}</td>
+      
         <td>
-          <form method="POST" action="/matches/{{ $match->matchId }}">
+          <form method="POST" action="/matches/{{ $match->matchKey }}">
           {{ csrf_field() }}
           {{ method_field('DELETE') }}
-          <button name="matchId" class="btn btn-sm btn-danger" type="submit" value="{{ $match->matchId }}">Destroy</button>
+          <button name="matchId" class="btn btn-sm btn-danger" type="submit" value="{{ $match->matchKey }}">Destroy</button>
           </form>
         </td>
       </tr>
     @endforeach
-      <tr>
-        <td></td>
-        <td>
-          <a class="btn btn-sm btn-primary pull-right" href="matches/create" value="">+ Create a new Match</button>
-        </td>
-      </tr>
     </tbody>
   </table>
 </div>

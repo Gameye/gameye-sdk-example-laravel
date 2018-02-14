@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \Gameye\SDK\GameyeClient;
+use \Gameye\SDK\GameyeHelper;
 
 class GamesController extends Controller
 {
@@ -19,8 +20,10 @@ class GamesController extends Controller
             "ApiEndpoint" => session('gameyeApiEndpoint'),
         ]);
         
-        // Execute GetGames on the GameyeClient.
-        $games = $client->GetGames();
+        // Execute gueryGame on the GameyeClient.
+        $gamesList = $client->queryGame();
+        $games = $gamesList->game;
+
         return view('games.index')->with('games', $games);
     }
 
@@ -30,21 +33,27 @@ class GamesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($key)
     {   
         $client = new \Gameye\SDK\GameyeClient([
             "AccessToken" => session('gameyeApiKey'),
             "ApiEndpoint" => session('gameyeApiEndpoint'),
         ]);
 
+        // Execute gueryGame on the GameyeClient.
+        $gamesList = $client->queryGame();
+
         // Get the game specific Locations and Templates from the GameyeClient
-        $locations = $client->GetLocations($id);
-        $templates = $client->GetTemplates($id);
-        $game = $client->GetGames()[$id];
+        $locations = GameyeHelper::selectLocationListForGame($gamesList, $key);
+
+        //dd($locations);
+        $templateList = $client->queryTemplate($key);
+        $templates = GameyeHelper::selectTemplateList($templateList);
+
 
         return view('games.show')
-            -> with('game', $game)
-            -> with('locations', $locations)
-            -> with('templates', $templates);
+            ->with('locations', $locations)
+            ->with('templates', $templates)
+            ->with('game', $key);
     }
 }

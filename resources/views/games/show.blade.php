@@ -13,15 +13,19 @@
     Game Information
   </div>
   <div class="panel-body">
-    Game information obtained from $game, $locations and $templates.
+    General information about the game
   </div>
   <table class="table">
-    <tr>
-      <td><strong>Game ID</strong></td>
-      <td>{{ $game->gameId }}</td>
-      <td><strong>Game Name</strong></td>
-      <td>{{ $game->name }}</td>  
+    <thead>
+      <tr>
+        <th>Game ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ $game }}</td>
     </tr>
+    </tbody>
   </table>
   </div>
 
@@ -32,14 +36,14 @@
   </div>
   <div class="panel-body">
       <tr>
-        Example location information
+        All servers location for {{ $game }}
       </tr>
   </div>
   <!-- Table -->
   <table class="table">
   <thead>
       <tr>
-        <th>Location Id</th>
+        <th>Location ID</th>
         <th>Name</th>
       </tr>
     </thead>
@@ -47,15 +51,13 @@
 
     @foreach($locations as $location)
     <tr>
-      <td>{{ $location->locationId }}</td>
-      <td>{{ $location->name }}</td>
+      <td>{{ $location->locationKey }}</td>
+      <td>{{ $location->locationName }}</td>
     </tr>
     @endforeach
     </tbody>
   </table>
   </div>
-
-
 
   <div class="panel panel-default">
   <!-- Default panel contents -->
@@ -64,23 +66,21 @@
   </div>
   <div class="panel-body">
       <tr>
-        Example template information
+         All templates available for {{ $game }}
       </tr>
   </div>
   <!-- Table -->
   <table class="table">
   <thead>
       <tr>
-        <th>Template Id</th>
-        <th>Name</th>
+        <th>Template ID</th>
       </tr>
     </thead>
     <tbody>
 
     @foreach($templates as $template)
     <tr>
-      <td>{{ $template->templateId }}</td>
-      <td>{{ $template->name }}</td>
+      <td>{{ $template->templateKey }}</td>
     </tr>
     @endforeach
     </tbody>

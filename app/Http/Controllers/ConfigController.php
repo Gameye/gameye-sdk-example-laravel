@@ -20,8 +20,8 @@ class ConfigController extends Controller
         if(empty($gameyeApiEndpoint)) $gameyeApiEndpoint = "https://api.gameye.com";
 
         return view('config.index')
-            -> with('gameyeApiKey', $gameyeApiKey)
-            -> with('gameyeApiEndpoint', $gameyeApiEndpoint);
+            ->with('gameyeApiKey', $gameyeApiKey)
+            ->with('gameyeApiEndpoint', $gameyeApiEndpoint);
     }
     
     public function store(Request $request)
@@ -35,8 +35,8 @@ class ConfigController extends Controller
         if ($validator->fails())
         {
             return redirect('config')
-                -> withErrors($validator)
-                -> withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
         
         $client = new \Gameye\SDK\GameyeClient([
@@ -44,15 +44,17 @@ class ConfigController extends Controller
             "ApiEndpoint" => $request->input('gameyeApiEndpoint'),
         ]);
 
+        $games = $client->queryGame();
+
         // Do an api call to check if the key and endpoint are valid
         try {
-            $games = $client->GetGames(); 
+            $games = $client->queryGame(); 
         }
         catch (\Exception $e) {
             $validator->errors()->add('gameyeApiKey', $e->getMessage());
             return redirect('config')
-                -> withErrors($validator)
-                -> withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
 
         // Set the variables uses session in this example.
@@ -60,7 +62,7 @@ class ConfigController extends Controller
         session(['gameyeApiKey' => $request->input('gameyeApiKey')]);
 
         return redirect('config')
-            -> with('status', 'Succesfully connected to the Gameye API.');
+            ->with('status', 'Succesfully connected to the Gameye API.');
     }
 
     public function destroy(Request $request)

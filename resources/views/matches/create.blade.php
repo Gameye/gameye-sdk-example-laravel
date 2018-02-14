@@ -26,7 +26,7 @@
                     <div class="col-sm-8">
                         <select name="locationId" class="form-control">
                             @foreach ($locations as $location)
-                                <option value="{{ $location->locationId }}">{{ $location->name }}</option>
+                                <option value="{{ $location->locationKey }}">{{ $location->locationName }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -40,11 +40,11 @@
                     <div class="col-sm-8">
                         <select name="templateId" class="form-control">
                             @foreach ($templates as $template)
-                                <option value="{{ $template->templateId }}"
-                                @if ($template->templateId == 20) 
+                                <option value="{{ $template->templateKey }}"
+                                @if ($template->templateKey == 20) 
                                     selected="selected" 
                                 @endif
-                                >{{ $template->name }}</option>
+                                >{{ $template->templateKey }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -53,7 +53,14 @@
                 <div class="form-group has-feedback">
                     <label class="col-sm-4 control-label">Steam token</label>
                     <div class="col-sm-8">
-                        <input type="text" name="sv_setsteamaccount" value="" class="form-control">
+                        <input type="text" name="steamToken" value="" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback">
+                    <label class="col-sm-4 control-label">Max players</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="maxplayers" value="10" class="form-control">
                     </div>
                 </div>
     

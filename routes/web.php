@@ -27,9 +27,9 @@ Route::group(['middleware' => 'noapi'], function () {
     Route::get('matches', 'MatchesController@index');
     Route::post('matches', 'MatchesController@store');
     Route::get('matches/create', 'MatchesController@create');
-    Route::get('matches/{id}', 'MatchesController@show');
-    Route::delete('matches/{id}', 'MatchesController@destroy');
+    Route::get('matches/{key}', 'MatchesController@show');
+    Route::delete('matches/{key}', 'MatchesController@destroy');
     
     Route::get('games', 'GamesController@index');
-    Route::get('games/{id}', 'GamesController@show');
+    Route::get('games/{key}', 'GamesController@show');
 });
