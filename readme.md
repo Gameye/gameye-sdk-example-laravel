@@ -1,4 +1,4 @@
-![Gameye](https://dev.gameye.com/img/logo_blue.png)
+![Gameye](https://gameye.com/img/logo_blue.png)
 
 # Gameye example implementation in Laravel #
 
@@ -13,7 +13,7 @@ Install the required packages via Composer
 composer install
 ```
 
-Copy the env.example file to a new .env file
+Copy the env.example file to a new .env file and Make sure to add your [Steam Web API key](http://steamcommunity.com/dev/apikey)
 
 ```cmd
 cp .env.example .env
