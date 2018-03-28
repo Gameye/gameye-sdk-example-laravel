@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \Gameye\SDK\GameyeClient;
 use \Gameye\SDK\GameyeHelper;
+use \Gameye\SDK\GameyeSelector;
 
 class MatchesController extends Controller
 {
@@ -105,13 +106,21 @@ class MatchesController extends Controller
         ]);
 
         $matchState = $client->queryMatch();
-        $match = GameyeHelper::selectMatchItem($matchState, $key);
+        $match = GameyeSelector::selectMatchItem($matchState, $key);
 
         $matchResult = $client->queryStatistic($key, 'global-match');
 
+        $teams = GameyeSelector::selectTeamList($matchResult);
+
+        $teamOnePlayers = GameyeSelector::selectPlayerListForTeam($matchResult, 1);
+        $teamTwoPlayers = GameyeSelector::selectPlayerListForTeam($matchResult, 2);
+
         return view('matches.show')
             ->with('match', $match)
-            ->with('result', $matchResult);
+            ->with('result', $matchResult)
+            ->with('teams', $teams)
+            ->with('teamOnePlayers', $teamOnePlayers)
+            ->with('teamTwoPlayers', $teamTwoPlayers);
     }
 
     /**

@@ -44,7 +44,6 @@
   <thead>
       <tr>
         <th>Location ID</th>
-        <th>Name</th>
       </tr>
     </thead>
     <tbody>
@@ -52,7 +51,6 @@
     @foreach($locations as $location)
     <tr>
       <td>{{ $location->locationKey }}</td>
-      <td>{{ $location->locationName }}</td>
     </tr>
     @endforeach
     </tbody>

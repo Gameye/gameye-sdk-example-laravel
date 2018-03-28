@@ -6,7 +6,7 @@
 
 @section('content')
 
-  <h1>Show Match</h1>
+  <h1>Match {{ $match->matchKey }}</h1>
   <div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading">
@@ -17,10 +17,10 @@
   </div>
   <table class="table">
     <tr>
-      <td><strong>Match ID</strong></td>
-      <td>{{ $match->matchKey }}</td>
       <td><strong>Server address</strong></td>
-      <td><a href="steam://connect/{{ $match->host}}:{{ $match->port->game }}">{{ $match->host}}:{{ $match->port->game }}</a></td>  
+      <td><a href="steam://connect/{{ $match->host}}:{{ $match->port->game }}">{{ $match->host}}:{{ $match->port->game }}</a></td> 
+       <td><strong>Created at</strong></td>
+      <td>{{ \Carbon\Carbon::createFromTimestamp(($match->created / 1000))->toDateTimeString() }}</td>
     </tr>
     <tr>
       <td><strong>Game port</strong></td>
@@ -29,9 +29,9 @@
       <td>{{ $match->port->gotv }}</td> 
     </tr>
     <tr>
-      <td><strong>Created at</strong></td>
-      <td>{{ \Carbon\Carbon::createFromTimestamp(($match->created / 1000))->toDateTimeString() }}</td>
-      <td><strong>State</strong></td>
+      <td><strong>Rounds played</strong></td>
+      <td>{{ $result->finishedRounds }}</td>
+      <td><strong>Status</strong></td>
       <td>
       @if (isset($result->stop))
       Match ended
@@ -40,85 +40,63 @@
       @endif
       </td>
     </tr>
-    <tr> {{-- 
-      <td><strong>Join link game</strong></td>
-      <td><a href="steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27015} }}">steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27015} }}</a></td>
-      <td><strong>Join link GOTV</strong></td>
-      <td><a href="steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27020} }}">steam://connect/{{ $match->host }}:{{  $match->portMapping->udp->{27020} }}</a></td> --}}
-    </tr>
   </table>
   </div>
 
-  {{-- <div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading">
-      Round information
-  </div>
-  <div class="panel-body">
-      <tr>
-        Example round information
-      </tr>
-  </div>
-  <!-- Table -->
-  <table class="table">
-  <thead>
-      <tr>
-        <th>Round</th>
-        <th>State</th>
-        <th>Score CT</th>
-        <th>Score TERRORIST</th>
-      </tr>
-    </thead>
-    <tbody>
-
-    @foreach($result->round as $round)
-    <tr>
-      <td>{{ $round->number }}</td>
-      @if ($round->isFinished===true)
-        <td>ended</td>
-        <td>{{ $round->result->CT->score }}</td> 
-        <td>{{ $round->result->TERRORIST->score }}</td> 
-      @else
-        <td>playing</td>
-        <td></td> 
-        <td></td>
-      @endif
-    </tr>
-    @endforeach
-    </tbody>
-  </table>
-  </div> --}}
-
+  
   <div class="panel panel-default">
-    <!-- Default panel contents -->
-    <div class="panel-heading">
-      Player information
-    </div>
-    <div class="panel-body">
-        <tr>
-          Player information.
-        </tr>
-    </div>
-
+    <div class="panel-heading">{{ $teams[1]->name }}</div>
+    <div class="panel-body"><strong>Score: {{ $teams[1]->statistic->score }}</strong></div>
     <table class="table">
       <thead>
         <tr>
           <th>UID</th>
-          <th>State</th>
+          <th>Nickname</th>
+          <th>Kills</th>
+          <th>Assists</th>
+          <th>Deaths</th>
         </tr>
       </thead>
       <tbody>
-        @foreach($result->player as $uid => $player)
+        @foreach($teamOnePlayers as $player)
           <tr>
             <td>{{ $player->uid }}</td>
-            @if ($player->connected)
-            <td>Connected</td>
-            @else
-            <td>Disconnected</td>
-            @endif
+            <td>{{ $player->name }}</td>
+            <td>{{ $player->statistic->kill }}</td>
+            <td>{{ $player->statistic->assist }}</td>
+            <td>{{ $player->statistic->death }}</td>
           </tr>
         @endforeach
       </tbody>
     </table>
   </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">{{ $teams[2]->name }}</div>
+    <div class="panel-body"><strong>Score: {{ $teams[2]->statistic->score }}</strong></div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>UID</th>
+          <th>Nickname</th>
+          <th>Kills</th>
+          <th>Assists</th>
+          <th>Deaths</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($teamTwoPlayers as $player)
+          <tr>
+            <td>{{ $player->uid }}</td>
+            <td>{{ $player->name }}</td>
+            <td>{{ $player->statistic->kill }}</td>
+            <td>{{ $player->statistic->assist }}</td>
+            <td>{{ $player->statistic->death }}</td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
+
+
 @endsection

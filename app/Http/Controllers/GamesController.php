@@ -46,7 +46,7 @@ class GamesController extends Controller
         // Get the game specific Locations and Templates from the GameyeClient
         $locations = GameyeHelper::selectLocationListForGame($gamesList, $key);
 
-        //dd($locations);
+        // Get the available game templates
         $templateList = $client->queryTemplate($key);
         $templates = GameyeHelper::selectTemplateList($templateList);
 
