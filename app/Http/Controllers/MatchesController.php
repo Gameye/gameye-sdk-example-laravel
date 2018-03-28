@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use \Gameye\SDK\GameyeClient;
 use \Gameye\SDK\GameyeHelper;
 use \Gameye\SDK\GameyeSelector;
+use Steam;
 
 class MatchesController extends Controller
 {
@@ -104,6 +105,8 @@ class MatchesController extends Controller
             "AccessToken" => session('gameyeApiKey'),
             "ApiEndpoint" => session('gameyeApiEndpoint'),
         ]);
+
+        //dd(Steam::user('STEAM_1:1:24748064')->GetPlayerSummaries()[0]);
 
         $matchState = $client->queryMatch();
         $match = GameyeSelector::selectMatchItem($matchState, $key);

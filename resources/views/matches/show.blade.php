@@ -50,6 +50,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th></th>
           <th>UID</th>
           <th>Nickname</th>
           <th>Kills</th>
@@ -60,8 +61,9 @@
       <tbody>
         @foreach($teamOnePlayers as $player)
           <tr>
+            <td><img src="{{ Steam::user($player->uid)->GetPlayerSummaries()[0]->avatarUrl }}"></td>
             <td>{{ $player->uid }}</td>
-            <td>{{ $player->name }}</td>
+            <td><a href="{{ Steam::user($player->uid)->GetPlayerSummaries()[0]->profileUrl }}" target="_blank">{{ $player->name }}</a></td>
             <td>{{ $player->statistic->kill }}</td>
             <td>{{ $player->statistic->assist }}</td>
             <td>{{ $player->statistic->death }}</td>
@@ -77,6 +79,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th></th>
           <th>UID</th>
           <th>Nickname</th>
           <th>Kills</th>
@@ -87,8 +90,9 @@
       <tbody>
         @foreach($teamTwoPlayers as $player)
           <tr>
+            <td><img src="{{ Steam::user($player->uid)->GetPlayerSummaries()[0]->avatarUrl }}"></td>
             <td>{{ $player->uid }}</td>
-            <td>{{ $player->name }}</td>
+            <td><a href="{{ Steam::user($player->uid)->GetPlayerSummaries()[0]->profileUrl }}" target="_blank">{{ $player->name }}</a></td>
             <td>{{ $player->statistic->kill }}</td>
             <td>{{ $player->statistic->assist }}</td>
             <td>{{ $player->statistic->death }}</td>
