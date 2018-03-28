@@ -26,7 +26,7 @@
                     <div class="col-sm-8">
                         <select name="locationId" class="form-control">
                             @foreach ($locations as $location)
-                                <option value="{{ $location->locationKey }}">{{ $location->locationName }}</option>
+                                <option value="{{ $location->locationKey }}">{{ $location->locationKey }}</option>
                             @endforeach
                         </select>
                     </div>

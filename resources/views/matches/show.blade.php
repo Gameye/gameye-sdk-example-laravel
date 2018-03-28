@@ -45,7 +45,7 @@
 
   
   <div class="panel panel-default">
-    <div class="panel-heading">{{ $teams[1]->name }}</div>
+    <div class="panel-heading">Team: {{ $teams[1]->name }}</div>
     <div class="panel-body"><strong>Score: {{ $teams[1]->statistic->score }}</strong></div>
     <table class="table">
       <thead>
@@ -74,7 +74,7 @@
   </div>
 
   <div class="panel panel-default">
-    <div class="panel-heading">{{ $teams[2]->name }}</div>
+    <div class="panel-heading">Team: {{ $teams[2]->name }}</div>
     <div class="panel-body"><strong>Score: {{ $teams[2]->statistic->score }}</strong></div>
     <table class="table">
       <thead>
